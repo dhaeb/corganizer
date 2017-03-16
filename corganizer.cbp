@@ -11,6 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option projectCompilerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -31,11 +32,18 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-DUSE_BOOST_REGEX" />
 			<Add directory="include" />
 		</Compiler>
 		<Linker>
 			<Add library="mysqlcppconn" />
+			<Add library="boost_regex" />
+			<Add library="boost_system" />
+			<Add library="boost_thread" />
+			<Add library="boost_filesystem" />
+			<Add library="boost_date_time" />
 			<Add directory="lib" />
+			<Add directory="/usr/lib/x86_64-linux-gnu" />
 		</Linker>
 		<Unit filename="main.cpp" />
 		<Extensions>
