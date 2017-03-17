@@ -1,0 +1,3 @@
+[submodule "test/LTest"]
+	path = test/LTest
+	url = git@github.com:IngoRoessner/LTest.git

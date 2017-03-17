@@ -28,6 +28,14 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Target title="test">
+				<Option output="bin/Test/corganizer_Test" prefix_auto="1" extension_auto="1" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add directory="test/LTest/src" />
+				</Compiler>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
@@ -45,7 +53,76 @@
 			<Add directory="lib" />
 			<Add directory="/usr/lib/x86_64-linux-gnu" />
 		</Linker>
-		<Unit filename="main.cpp" />
+		<Unit filename="main.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="test/LTest/src/AsyncTaskExecuter.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/FunctionPattern.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/LTest.cpp">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/LTest.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/LTestAssert.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/LTestMisuseException.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/ManagedFixture.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/MuteStream.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/Format.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/OutputFormat.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/OutputFormatBase.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/TextOutput.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/TextTable.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/XmlOutput.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/rapidxml/rapidxml.hpp">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/rapidxml/rapidxml_iterators.hpp">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/rapidxml/rapidxml_print.hpp">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/OutputFormat/rapidxml/rapidxml_utils.hpp">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/ParameterTest.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/TestResult.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LTest/src/toStringPatch.h">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LibraryTestLTest.cpp">
+			<Option target="test" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />
