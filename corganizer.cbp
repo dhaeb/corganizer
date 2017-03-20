@@ -42,6 +42,7 @@
 			<Add option="-fexceptions" />
 			<Add option="-DUSE_BOOST_REGEX" />
 			<Add directory="include" />
+			<Add directory="src" />
 		</Compiler>
 		<Linker>
 			<Add library="mysqlcppconn" />
@@ -53,10 +54,12 @@
 			<Add directory="lib" />
 			<Add directory="/usr/lib/x86_64-linux-gnu" />
 		</Linker>
-		<Unit filename="main.cpp">
+		<Unit filename="src/main.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="src/routes.cpp" />
+		<Unit filename="src/routes.h" />
 		<Unit filename="test/LTest/src/AsyncTaskExecuter.h">
 			<Option target="test" />
 		</Unit>

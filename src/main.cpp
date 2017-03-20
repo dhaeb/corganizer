@@ -10,17 +10,13 @@
 #include <memory>
 #include <chrono>
 
-#include "include/simple-web-server/server_http.hpp"
-#include "include/simple-web-server/client_http.hpp"
-
+#include "simple-web-server/server_http.hpp"
+#include "simple-web-server/client_http.hpp"
 
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
-
-typedef SimpleWeb::Server<SimpleWeb::HTTP> HttpServer;
-typedef SimpleWeb::Client<SimpleWeb::HTTP> HttpClient;
 
 using boost::property_tree::ptree;
 
@@ -42,6 +38,16 @@ using std::ios;
 using std::vector;
 using std::streamsize;
 
+typedef SimpleWeb::Client<SimpleWeb::HTTP> HttpClient;
+
+using SimpleWeb::ServerBase;
+using SimpleWeb::Server;
+using SimpleWeb::HTTP;
+
+typedef Server<HTTP> HttpServer;
+typedef ServerBase<HTTP>::Request Request;
+typedef ServerBase<HTTP>::Response Response;
+
 void default_resource_send(const HttpServer &server, const shared_ptr<HttpServer::Response> &response,
                            const shared_ptr<ifstream> &ifs) {
     //read and send 128 KB at a time
@@ -59,6 +65,7 @@ void default_resource_send(const HttpServer &server, const shared_ptr<HttpServer
         }
     }
 }
+
 
 int main()
 {
@@ -213,6 +220,7 @@ int main()
         }
     };
 
+    //Client examples
 
     thread server_thread([&server]()
     {
@@ -220,6 +228,10 @@ int main()
         //Start server
         server.start();
     });
+    sleep_for(std::chrono::seconds(1));
+    HttpClient client("localhost:8080");
+    auto r1=client.request("GET", "/info");
+    cout << r1->content.rdbuf() << endl;
 
     server_thread.join();
 

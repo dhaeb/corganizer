@@ -1,23 +1,34 @@
 #include "LTest.h"
+#include "LTestAssert.h"
+#include "routes.h"
+#include "simple-web-server/client_http.hpp"
 
-bool is_leap_year(unsigned int year){
-        return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0;
-}
+#include <chrono>
+#include <thread>
 
-TestSuite suite = {
-     ltest().addTest("test is leap year 2014 : ", [](){
-         return !is_leap_year(2014);
-     }),
-     ltest().addTest("test is leap year 1900 : ", [](){
-         return !is_leap_year(1900);
-     }),
-     ltest().addTest("test is leap year 2000 : ", [](){
-         return is_leap_year(2000);
-     })
+using std::this_thread::sleep_for;
+
+typedef SimpleWeb::Client<SimpleWeb::HTTP> HttpClient;
+
+TestSuite httpServerSuite =
+{
+    ltest().addTest("test server is running", []()
+    {
+        httpserver_config c("test/resources/html", 8080, 1);
+        httpserver server(c);
+        server.start();
+        sleep_for(std::chrono::seconds(1));
+        HttpClient client("localhost:8080");
+        auto r1=client.request("GET", "/test.txt");
+        std::ostringstream a;
+        a << r1->content.rdbuf();
+        server.stop();
+        LTAssert::Equal(string("testpage"), a.str());
+    }),
 };
 
-int main() {
-    ltest().run(suite);
-    std::cout << "asdf";
+int main()
+{
+    ltest().run(httpServerSuite);
     return 0;
 }
