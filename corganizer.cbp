@@ -45,6 +45,7 @@
 			<Add directory="src" />
 		</Compiler>
 		<Linker>
+			<Add option="-pthread" />
 			<Add library="mysqlcppconn" />
 			<Add library="boost_regex" />
 			<Add library="boost_system" />

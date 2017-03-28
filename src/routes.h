@@ -5,12 +5,14 @@
 
 #include <boost/filesystem.hpp>
 
+#include <algorithm>
 #include <string>
 #include <map>
 #include <fstream>
 #include <exception>
 #include <vector>
 
+using std::distance;
 using std::cerr;
 using std::cout;
 using std::endl;
@@ -26,6 +28,7 @@ using std::invalid_argument;
 using std::exception;
 using std::ios;
 using std::streamsize;
+using std::equal;
 
 using SimpleWeb::ServerBase;
 using SimpleWeb::Server;
@@ -98,13 +101,20 @@ public :
                 auto web_root_path=boost::filesystem::canonical(this->conf.getRoot().c_str());
                 auto path=boost::filesystem::canonical(web_root_path/request->path);
                 //Check if path is within web_root_path
-                /*if(distance(web_root_path.begin(), web_root_path.end())>distance(path.begin(), path.end()) ||
-                        !equal(web_root_path.begin(), web_root_path.end(), path.begin()))
+                bool isRelativePath = distance(web_root_path.begin(), web_root_path.end()) > distance(path.begin(), path.end()),
+                     isStartingWithRoot = equal(web_root_path.begin(), web_root_path.end(), path.begin()),
+                     isNoDirectoryTraversal = isRelativePath | not isStartingWithRoot;
+                if(isNoDirectoryTraversal){
                     throw invalid_argument("path must be within root path");
-                if(boost::filesystem::is_directory(path))
+                }
+                if(boost::filesystem::is_directory(path)){
                     path/="index.html";
-                if(!(boost::filesystem::exists(path) && boost::filesystem::is_regular_file(path)))
-                    throw invalid_argument("file does not exist");*/
+                }
+                bool fileIsNotUsable = not boost::filesystem::exists(path) or not boost::filesystem::is_regular_file(path);
+                if(fileIsNotUsable){
+                    throw invalid_argument("file does not exist");
+                }
+
 
                 auto ifs=make_shared<ifstream>();
                 ifs->open(path.string(), ifstream::in | ios::binary);
