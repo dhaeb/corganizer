@@ -13,15 +13,4 @@ void httpserver::start(){
             this->server->start();
         });
     }
-
-}
-
-void httpserver::stop(){  // FIXME kill thread?
-    if(is_started){
-        server_thread = nullptr;
-        is_started = false;
-    } else {
-        cerr << "versuche server zu stoppen, obwohl er nicht läuft!" << endl;
-    }
-
 }

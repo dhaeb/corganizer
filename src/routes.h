@@ -146,7 +146,6 @@ public :
 
     void register_route(http_method, string, function<void(Request, Response)>);
     void start();
-    void stop();
 
     ~httpserver()
     {
