@@ -2,6 +2,8 @@
 #include "LTestAssert.h"
 #include "routes.h"
 #include "simple-web-server/client_http.hpp"
+#include "LibraryTestMySQL.hpp"
+
 
 #include <chrono>
 #include <thread>
@@ -47,11 +49,20 @@ TestSuite httpServerSuite =
         bool havingRightboostError = starts_with(a.str(), "Could not open path /notfindable: boost::filesystem::canonical: No such file or directory");
         True(havingRightboostError);
     }),
+
+
+    ltest().addTest("run mysql library test", []()
+    {
+        testMysql();
+    }),
 };
 
 int main()
 {
     ltest().run(httpServerSuite);
-
     return 0;
 }
+
+
+
+
