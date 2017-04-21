@@ -33,6 +33,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-g" />
 					<Add directory="test/LTest/src" />
 				</Compiler>
 			</Target>
@@ -125,6 +126,9 @@
 			<Option target="test" />
 		</Unit>
 		<Unit filename="test/LibraryTestLTest.cpp">
+			<Option target="test" />
+		</Unit>
+		<Unit filename="test/LibraryTestMySQL.hpp">
 			<Option target="test" />
 		</Unit>
 		<Extensions>
