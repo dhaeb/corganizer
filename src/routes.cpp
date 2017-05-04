@@ -12,5 +12,6 @@ void httpserver::start(){
             //Start server
             this->server->start();
         });
+        server_thread->detach();
     }
 }

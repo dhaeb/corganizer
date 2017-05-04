@@ -21,10 +21,12 @@ using std::string;
 using boost::starts_with;
 using LTAssert::True;
 using LTAssert::Equal;
+using LTAssert::ExpectException;
 
 typedef SimpleWeb::Client<SimpleWeb::HTTP> HttpClient;
 
 httpserver_config c("test/resources/html", 8080, 1);
+
 auto httpserverInstance = manageFixture<httpserver*>()
                           .before([](httpserver* server)
 {
@@ -39,6 +41,20 @@ auto httpserverInstance = manageFixture<httpserver*>()
 
 TestSuite httpServerSuite =
 {
+
+    ltest().addTest("server stops when it should stop", [](){
+        httpserver* s = new httpserver(c);
+        s->start();
+        sleep_for(seconds(1));
+        delete s;
+        ExpectException<exception>([](){
+            HttpClient client("localhost:8080");
+            auto r1=client.request("GET", "index.html");
+            ostringstream a;
+            a << r1->content.rdbuf();
+            string returnable = a.str();
+        });
+    }),
 
     ltest().addTest("paramtest with validating expect", [](string i)
     {
