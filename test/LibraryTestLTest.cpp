@@ -5,18 +5,18 @@
 #include "LibraryTestMySQL.hpp"
 
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <streambuf>
 #include <chrono>
-#include <thread>
+#include <chrono>
 #include <string>
 
-using std::this_thread::sleep_for;
 using std::ostringstream;
-using std::chrono::seconds;
 using std::ifstream;
 using std::istreambuf_iterator;
 using std::string;
+using std::stringstream;
 
 using boost::starts_with;
 using LTAssert::True;
@@ -25,18 +25,33 @@ using LTAssert::ExpectException;
 
 typedef SimpleWeb::Client<SimpleWeb::HTTP> HttpClient;
 
-httpserver_config c("test/resources/html", 8080, 1);
+const int port = 8080;
+httpserver_config c("test/resources/html", port, 1);
+
+string performGetRequest(const char* filepath){
+    stringstream hostAndPort;
+    hostAndPort << "localhost" << ":" << port;
+    auto hostAndPortCstring = hostAndPort.str().c_str();
+    HttpClient client(hostAndPortCstring);
+    auto r1=client.request("GET", filepath);
+    ostringstream a;
+    a << r1->content.rdbuf();
+
+    string returnable = a.str();
+    return returnable;
+}
 
 auto httpserverInstance = manageFixture<httpserver*>()
-                          .before([](httpserver* server)
+.before([](httpserver* server)
 {
     server = new httpserver(c);
     server->start();
-    sleep_for(seconds(1));
+
 })
-.after([](httpserver* server)
+.after([](httpserver*
+           server)
 {
-    delete server;
+    server->stop();
 });
 
 TestSuite httpServerSuite =
@@ -45,26 +60,16 @@ TestSuite httpServerSuite =
     ltest().addTest("server stops when it should stop", [](){
         httpserver* s = new httpserver(c);
         s->start();
-        sleep_for(seconds(1));
-        delete s;
+        s->stop();
         ExpectException<exception>([](){
-            HttpClient client("localhost:8080");
-            auto r1=client.request("GET", "index.html");
-            ostringstream a;
-            a << r1->content.rdbuf();
-            string returnable = a.str();
+            performGetRequest("index.html");
         });
     }),
 
     ltest().addTest("paramtest with validating expect", [](string i)
     {
         httpserverInstance();
-        HttpClient client("localhost:8080");
-        auto r1=client.request("GET", i);
-        ostringstream a;
-        a << r1->content.rdbuf();
-        string returnable = a.str();
-        return returnable;
+        return performGetRequest(i.c_str());
     },[](ParameterTest<string, string> test)
     {
         test.with("/notfindable").expect([](string a)

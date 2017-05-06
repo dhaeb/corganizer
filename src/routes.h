@@ -11,6 +11,7 @@
 #include <fstream>
 #include <exception>
 #include <vector>
+#include <chrono>
 
 using std::distance;
 using std::cerr;
@@ -29,10 +30,12 @@ using std::exception;
 using std::ios;
 using std::streamsize;
 using std::equal;
+using std::chrono::duration;
 
 using SimpleWeb::ServerBase;
 using SimpleWeb::Server;
 using SimpleWeb::HTTP;
+
 
 typedef Server<HTTP> HttpServer;
 typedef ServerBase<HTTP>::Request Request;
@@ -145,7 +148,10 @@ public :
     httpserver& operator=(const httpserver&) = delete;
 
     void register_route(http_method, string, function<void(Request, Response)>);
+    template<typename DurationType> void start(const DurationType& t);
     void start();
+    template<typename DurationType> void stop(const DurationType& t);
+    void stop();
 
     ~httpserver()
     {
